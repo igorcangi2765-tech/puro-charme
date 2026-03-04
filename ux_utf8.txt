@@ -1,0 +1,25 @@
+﻿
+[UX AUDIT] 12 files checked
+--------------------------------------------------
+[!] ISSUES (3):
+  - [Cognitive Load] index.html: Form inputs without labels. Use <label> for accessibility and clarity.
+  - [Color] AIChat.tsx: PURPLE DETECTED ('purple'). Banned by Maestro rules. Use Teal/Cyan/Emerald instead.
+  - [Cognitive Load] ArtistCard.tsx: Form inputs without labels. Use <label> for accessibility and clarity.
+[*] WARNINGS (57):
+  - [Fitts' Law] App.tsx: Small targets (< 44px)
+  - [Cognitive Load] App.tsx: High visual noise detected. Many colors and borders increase cognitive load.
+  - [Typography] App.tsx: No line length constraint (45-75ch). Use max-w-prose or max-w-[65ch].
+  - [Typography] App.tsx: Fixed font sizes without clamp(). Consider fluid typography: clamp(MIN, PREFERRED, MAX)
+  - [Typography] App.tsx: Skipped heading level (h1 -> h3). Maintain sequential hierarchy.
+  - [Typography] App.tsx: Skipped heading level (h2 -> h4). Maintain sequential hierarchy.
+  - [Typography] App.tsx: Skipped heading level (h1 -> h4). Maintain sequential hierarchy.
+  - [Performance] App.tsx: Animating expensive properties (bottom, left, height, right, width, top). Use transform/opacity where possible.
+  - [Accessibility] App.tsx: Animations found without prefers-reduced-motion check
+  - [Color] App.tsx: 9 distinct colors. Consider 60-30-10 rule: dominant (60%), secondary (30%), accent (10%).
+  - [Color] App.tsx: Possible low-contrast combination detected. Verify WCAG AA (4.5:1 for text).
+  - [Color] App.tsx: Blue color in food context. Blue suppresses appetite; consider warm colors (red, orange, yellow).
+  - [Serial Position] index.html: Last nav item may not be important. Place key actions at start/end.
+  - [Visceral] index.html: Hero section lacks visual appeal. Consider gradients or subtle animations.
+  - [Persuasion] index.html: Prices without anchoring. Show original price to frame discount value.
+[+] PASSED CHECKS: 7
+STATUS: FAIL
