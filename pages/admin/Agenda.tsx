@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
-import { Calendar as CalendarIcon, Clock, User, Check, X, RefreshCw, Smartphone } from 'lucide-react';
-import { format, parseISO, isToday, isTomorrow } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
+import { Calendar as CalendarIcon, User, Check, X, RefreshCw, Smartphone } from 'lucide-react';
 
 interface Appointment {
     id: string;
@@ -77,10 +75,15 @@ export default function Agenda() {
     };
 
     const formatAppointmentDate = (dateStr: string) => {
-        const date = parseISO(dateStr);
-        if (isToday(date)) return 'Hoje';
-        if (isTomorrow(date)) return 'Amanhã';
-        return format(date, "dd 'de' MMM", { locale: ptBR });
+        const date = new Date(dateStr);
+        const today = new Date();
+        const tomorrow = new Date(today);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+
+        if (date.toDateString() === today.toDateString()) return 'Hoje';
+        if (date.toDateString() === tomorrow.toDateString()) return 'Amanhã';
+
+        return new Intl.DateTimeFormat('pt-BR', { day: '2-digit', month: 'short' }).format(date).replace('de ', '');
     };
 
     return (

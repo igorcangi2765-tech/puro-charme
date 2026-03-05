@@ -158,6 +158,7 @@ const MainSite: React.FC = () => {
     name: '',
     phone: '',
     date: '',
+    time: '14:00',
     service: 'Unhas Acrílicas',
     message: ''
   });
@@ -177,6 +178,41 @@ const MainSite: React.FC = () => {
     };
     loadWebsiteInfo();
   }, []);
+
+  const handleFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    setFormData(prev => ({
+      ...prev,
+      [e.target.name]: e.target.value
+    }));
+  };
+
+  const handleFormSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitStatus('loading');
+
+    // Save to appointments table
+    const { error } = await supabase
+      .from('appointments')
+      .insert([
+        {
+          customer_name: formData.name,
+          customer_phone: formData.phone,
+          service_type: formData.service,
+          appointment_date: formData.date,
+          appointment_time: formData.time,
+          notes: formData.message,
+          status: 'pendente'
+        }
+      ]);
+
+    if (error) {
+      console.error('Error saving appointment:', error);
+      setSubmitStatus('error');
+    } else {
+      setSubmitStatus('success');
+      setFormData({ name: '', phone: '', date: '', time: '14:00', service: t.services.salon[0].title, message: '' });
+    }
+  };
 
   // Whatsapp Button Component (New Circular Design)
   const WhatsAppButton = () => (
@@ -248,75 +284,6 @@ const MainSite: React.FC = () => {
         top: offsetPosition,
         behavior: 'smooth'
       });
-    }
-  };
-
-  const handleFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleFormSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (submitStatus === 'loading') return;
-
-    setSubmitStatus('loading');
-
-    // 1. Local Save (Backup)
-    try {
-      const submission = { ...formData, timestamp: new Date().toISOString() };
-      const saved = JSON.parse(localStorage.getItem('puroCharmeContacts') || '[]');
-      localStorage.setItem('puroCharmeContacts', JSON.stringify([...saved, submission]));
-    } catch (err) {
-      console.warn('Local storage error', err);
-    }
-
-    // 2. Prepare Data for FormSubmit
-    // Format the phone number (Mozambican standard)
-    let cleanPhone = formData.phone.replace(/[^0-9]/g, '');
-    if (cleanPhone.length === 9) cleanPhone = '258' + cleanPhone;
-
-    // Create WhatsApp Link
-    const waLink = `https://wa.me/${cleanPhone}`;
-
-    // Display Phone
-    let displayPhone = formData.phone;
-    if (cleanPhone.length === 12 && cleanPhone.startsWith('258')) {
-      displayPhone = `+${cleanPhone.substring(0, 3)} ${cleanPhone.substring(3, 5)} ${cleanPhone.substring(5, 8)} ${cleanPhone.substring(8)}`;
-    }
-
-    // Payload
-    const payload = {
-      _subject: `Novo Pedido: ${formData.service} - ${formData.name}`,
-      _template: 'table',
-      _captcha: 'false', // Disable captcha for cleaner background submit
-      Nome: formData.name,
-      Telefone: displayPhone,
-      Data: formData.date || 'Não informada',
-      Serviço: formData.service,
-      Mensagem: formData.message,
-      'Link WhatsApp': waLink // Custom field for the button URL (will appear as text/link in email)
-    };
-
-    // 3. Send to FormSubmit
-    try {
-      const response = await fetch(`https://formsubmit.co/ajax/${websiteInfo.contact_email || 'info@pcharme.niassa.site'}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify(payload),
-      });
-
-      if (response.ok) {
-        setSubmitStatus('success');
-      } else {
-        throw new Error('FormSubmit error');
-      }
-    } catch (error) {
-      console.error('Submission error:', error);
-      setSubmitStatus('error');
     }
   };
 
@@ -966,14 +933,32 @@ const MainSite: React.FC = () => {
                       <div className="grid grid-cols-2 gap-6">
                         <div className="space-y-2">
                           <label className="font-body text-xs font-medium uppercase tracking-[0.2em] text-gray-400 pl-1 block">{t.contact.form.date}</label>
-                          <input
-                            name="date"
-                            type="date"
-                            value={formData.date}
-                            onChange={handleFormChange}
-                            required
-                            className="w-full bg-puro-inputBg border border-transparent p-4 rounded-xl text-sm focus:bg-white focus:border-puro-pastelPink/30 focus:ring-4 focus:ring-puro-softPink transition-all text-puro-black outline-none font-body font-medium"
-                          />
+                          <div className="flex gap-2">
+                            <input
+                              name="date"
+                              type="date"
+                              value={formData.date}
+                              onChange={handleFormChange}
+                              required
+                              className="w-full bg-puro-inputBg border border-transparent p-4 rounded-xl text-sm focus:bg-white focus:border-puro-pastelPink/30 focus:ring-4 focus:ring-puro-softPink transition-all text-puro-black outline-none font-body font-medium"
+                            />
+                            <select
+                              name="time"
+                              value={formData.time}
+                              onChange={handleFormChange}
+                              className="w-[120px] bg-puro-inputBg border border-transparent p-4 rounded-xl text-sm focus:bg-white focus:border-puro-pastelPink/30 focus:ring-4 focus:ring-puro-softPink transition-all text-puro-black outline-none font-body font-medium"
+                            >
+                              {Array.from({ length: 11 }).map((_, i) => {
+                                const hour = i + 9; // 9:00 to 19:00
+                                return (
+                                  <React.Fragment key={i}>
+                                    <option value={`${hour}:00`}>{hour}:00</option>
+                                    <option value={`${hour}:30`}>{hour}:30</option>
+                                  </React.Fragment>
+                                );
+                              })}
+                            </select>
+                          </div>
                         </div>
                         <div className="space-y-2">
                           <label className="font-body text-xs font-medium uppercase tracking-[0.2em] text-gray-400 pl-1 block">{t.contact.form.service}</label>
