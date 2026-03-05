@@ -21,3 +21,14 @@ root.render(
     </ErrorBoundary>
   </React.StrictMode>
 );
+
+const supabase = (window as any).supabaseClient;
+
+async function testConnection() {
+  const { data, error } = await supabase.from("orders").select("*");
+
+  console.log("SUPABASE DATA:", data);
+  console.log("SUPABASE ERROR:", error);
+}
+
+testConnection();
