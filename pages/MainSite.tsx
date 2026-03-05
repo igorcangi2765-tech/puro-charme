@@ -9,6 +9,7 @@ import { Menu, X, Instagram, Phone, MapPin, Globe, ArrowRight, Heart, Star, Spar
 import { content } from '../content';
 import { Language, GalleryItem } from '../types';
 import { LanguageSelector } from '../components/LanguageSelector';
+import { supabase } from '../lib/supabase';
 
 
 
@@ -163,12 +164,24 @@ const MainSite: React.FC = () => {
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
   const t = content[lang];
+  const [websiteInfo, setWebsiteInfo] = useState<any>({});
 
+  useEffect(() => {
+    // Load dynamic info from Supabase
+    const loadWebsiteInfo = async () => {
+      const { data } = await supabase.from('website_info').select('*');
+      if (data) {
+        const infoMap = data.reduce((acc, curr) => ({ ...acc, [curr.key]: curr.value }), {});
+        setWebsiteInfo(infoMap);
+      }
+    };
+    loadWebsiteInfo();
+  }, []);
 
   // Whatsapp Button Component (New Circular Design)
   const WhatsAppButton = () => (
     <a
-      href={`https://wa.me/258848920837?text=${encodeURIComponent(t.contact.whatsapp.message)}`}
+      href={`https://wa.me/${(websiteInfo.contact_phone || '258848920837').replace(/[^0-9]/g, '')}?text=${encodeURIComponent(t.contact.whatsapp.message)}`}
       target="_blank"
       rel="noopener noreferrer"
       className="fixed bottom-6 right-6 z-[60] w-14 h-14 bg-puro-pink text-white rounded-full shadow-[0_4px_15px_rgba(255,64,149,0.3)] hover:shadow-[0_8px_25px_rgba(255,64,149,0.4)] hover:bg-[#e03882] hover:scale-105 transition-all duration-300 cursor-pointer flex items-center justify-center group"
@@ -287,7 +300,7 @@ const MainSite: React.FC = () => {
 
     // 3. Send to FormSubmit
     try {
-      const response = await fetch('https://formsubmit.co/ajax/info@pcharme.niassa.site', {
+      const response = await fetch(`https://formsubmit.co/ajax/${websiteInfo.contact_email || 'info@pcharme.niassa.site'}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -1030,13 +1043,12 @@ const MainSite: React.FC = () => {
 
                     <div className="space-y-12">
                       <motion.div whileHover={{ x: 10 }} className="flex items-start gap-6 group cursor-default">
-                        <a href="tel:+258864252968" className="bg-white/5 p-4 rounded-2xl text-puro-gold group-hover:bg-puro-gold group-hover:text-white transition-all duration-300 border border-white/10 flex items-center justify-center">
+                        <a href={`tel:${(websiteInfo.contact_phone || '+258864252968').replace(/[^0-9+]/g, '')}`} className="bg-white/5 p-4 rounded-2xl text-puro-gold group-hover:bg-puro-gold group-hover:text-white transition-all duration-300 border border-white/10 flex items-center justify-center">
                           <Phone size={24} strokeWidth={1.5} />
                         </a>
                         <div>
                           <p className="font-headline text-[10px] font-bold uppercase tracking-[0.25em] text-puro-gold mb-3">{t.contact.info.call}</p>
-                          <p className="font-body text-xl md:text-2xl font-light tracking-wide">+258 84 892 0837</p>
-                          <p className="font-body text-lg md:text-xl text-gray-500 mt-1 font-light tracking-wide">+258 86 425 2968</p>
+                          <p className="font-body text-xl md:text-2xl font-light tracking-wide">{websiteInfo.contact_phone || '+258 84 892 0837'}</p>
                         </div>
                       </motion.div>
 
@@ -1044,7 +1056,7 @@ const MainSite: React.FC = () => {
                         <div className="bg-white/5 p-4 rounded-2xl text-puro-gold group-hover:bg-puro-gold group-hover:text-white transition-all duration-300 border border-white/10"><Instagram size={24} strokeWidth={1.5} /></div>
                         <div>
                           <p className="font-headline text-[10px] font-bold uppercase tracking-[0.25em] text-puro-gold mb-3">{t.contact.info.follow}</p>
-                          <a href="https://instagram.com/purocharme20229" target="_blank" className="font-body text-xl md:text-2xl hover:text-puro-gold transition-colors tracking-wide font-light">@purocharme20229</a>
+                          <a href={websiteInfo.instagram_url || "https://instagram.com/purocharme20229"} target="_blank" className="font-body text-xl md:text-2xl hover:text-puro-gold transition-colors tracking-wide font-light">@purocharme20229</a>
                         </div>
                       </motion.div>
 
@@ -1101,10 +1113,10 @@ const MainSite: React.FC = () => {
 
               {/* Email Link (Simple Text) */}
               <a
-                href="mailto:info@pcharme.niassa.site"
+                href={`mailto:${websiteInfo.contact_email || 'info@pcharme.niassa.site'}`}
                 className="block text-gray-400 font-body text-sm mb-8 hover:text-puro-pink transition-colors w-fit"
               >
-                info@pcharme.niassa.site
+                {websiteInfo.contact_email || 'info@pcharme.niassa.site'}
               </a>
 
               <div className="flex gap-4">
