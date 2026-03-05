@@ -6,6 +6,7 @@ import Dashboard from './pages/admin/Dashboard';
 import Login from './pages/admin/Login';
 import Products from './pages/admin/Products';
 import Orders from './pages/admin/Orders';
+import Agenda from './pages/admin/Agenda';
 import Settings from './pages/admin/Settings';
 import { useAuthStore } from './store/authStore';
 
@@ -49,6 +50,7 @@ const App: React.FC = () => {
           <Route index element={<Dashboard />} />
           <Route path="products" element={<Products />} />
           <Route path="orders" element={<Orders />} />
+          <Route path="agenda" element={<Agenda />} />
           <Route path="settings" element={<Settings />} />
         </Route>
       </Routes>
