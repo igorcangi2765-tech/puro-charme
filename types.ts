@@ -118,6 +118,7 @@ export interface ContentData {
       name: string;
       phone: string;
       date: string;
+      time: string;
       service: string;
       message: string;
       submit: string;

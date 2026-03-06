@@ -966,20 +966,23 @@ const MainSite: React.FC = () => {
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2">
                           <label className="font-body text-xs font-medium uppercase tracking-[0.2em] text-gray-400 pl-1 block">{t.contact.form.date}</label>
-                          <div className="flex flex-col sm:flex-row gap-2">
-                            <input
-                              name="date"
-                              type="date"
-                              value={formData.date}
-                              onChange={handleFormChange}
-                              required
-                              className="w-full bg-puro-inputBg border border-transparent p-4 min-h-[52px] rounded-xl text-sm focus:bg-white focus:border-puro-pastelPink/30 focus:ring-4 focus:ring-puro-softPink transition-all text-puro-black outline-none font-body font-medium"
-                            />
+                          <input
+                            name="date"
+                            type="date"
+                            value={formData.date}
+                            onChange={handleFormChange}
+                            required
+                            className="w-full bg-puro-inputBg border border-transparent p-4 min-h-[52px] rounded-xl text-sm focus:bg-white focus:border-puro-pastelPink/30 focus:ring-4 focus:ring-puro-softPink transition-all text-puro-black outline-none font-body font-medium"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <label className="font-body text-xs font-medium uppercase tracking-[0.2em] text-gray-400 pl-1 block">{t.contact.form.time || 'Horário'}</label>
+                          <div className="relative">
                             <select
                               name="time"
                               value={formData.time}
                               onChange={handleFormChange}
-                              className="w-full sm:w-[120px] bg-puro-inputBg border border-transparent p-4 min-h-[52px] rounded-xl text-sm focus:bg-white focus:border-puro-pastelPink/30 focus:ring-4 focus:ring-puro-softPink transition-all text-puro-black outline-none font-body font-medium"
+                              className="w-full bg-puro-inputBg border border-transparent p-4 min-h-[52px] rounded-xl text-sm focus:bg-white focus:border-puro-pastelPink/30 focus:ring-4 focus:ring-puro-softPink transition-all text-puro-black outline-none appearance-none font-body font-medium"
                             >
                               {Array.from({ length: 11 }).map((_, i) => {
                                 const hour = i + 9; // 9:00 to 19:00
@@ -991,22 +994,26 @@ const MainSite: React.FC = () => {
                                 );
                               })}
                             </select>
-                          </div>
-                        </div>
-                        <div className="space-y-2">
-                          <label className="font-body text-xs font-medium uppercase tracking-[0.2em] text-gray-400 pl-1 block">{t.contact.form.service}</label>
-                          <div className="relative">
-                            <select
-                              name="service"
-                              value={formData.service}
-                              onChange={handleFormChange}
-                              className="w-full bg-puro-inputBg border border-transparent p-4 min-h-[52px] rounded-xl text-sm focus:bg-white focus:border-puro-pastelPink/30 focus:ring-4 focus:ring-puro-softPink transition-all text-puro-black outline-none appearance-none font-body font-medium"
-                            >
-                              {t.services.salon.map(s => <option key={s.title} value={s.title}>{s.title}</option>)}
-                            </select>
                             <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
                               <ChevronRight size={16} className="rotate-90" />
                             </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <label className="font-body text-xs font-medium uppercase tracking-[0.2em] text-gray-400 pl-1 block">{t.contact.form.service}</label>
+                        <div className="relative">
+                          <select
+                            name="service"
+                            value={formData.service}
+                            onChange={handleFormChange}
+                            className="w-full bg-puro-inputBg border border-transparent p-4 min-h-[52px] rounded-xl text-sm focus:bg-white focus:border-puro-pastelPink/30 focus:ring-4 focus:ring-puro-softPink transition-all text-puro-black outline-none appearance-none font-body font-medium"
+                          >
+                            {t.services.salon.map(s => <option key={s.title} value={s.title}>{s.title}</option>)}
+                          </select>
+                          <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
+                            <ChevronRight size={16} className="rotate-90" />
                           </div>
                         </div>
                       </div>
@@ -1103,7 +1110,7 @@ const MainSite: React.FC = () => {
                 </div>
               </div>
             </motion.div>
-          </section>
+          </section >
         </>
       ) : (
         <section className="pt-40 pb-20 min-h-[80vh] bg-white">
@@ -1247,7 +1254,7 @@ const MainSite: React.FC = () => {
 
       <CustomCursor />
       <WhatsAppButton />
-    </div>
+    </div >
   );
 };
 

@@ -1,7 +1,30 @@
 import { ContentData } from './types';
 
+// Helper to get local images
+const localGalleryImages = import.meta.glob('./public/assets/img/gallery-*.{png,jpg,jpeg,webp,gif}', { eager: true, as: 'url' });
+
+const getLocalGalleryItems = () => {
+  return Object.entries(localGalleryImages).map(([path, url], index) => {
+    // Extract filename to determine category if possible, or default to 'space' or 'all'
+    const fileName = path.split('/').pop()?.toLowerCase() || '';
+    let category = 'space'; // Default category for local gallery assets
+
+    if (fileName.includes('manicure') || fileName.includes('pedicure')) category = 'manicure_pedicure';
+    else if (fileName.includes('hair') || fileName.includes('tranca')) category = 'hair';
+    else if (fileName.includes('boutique') || fileName.includes('clothes')) category = 'boutique';
+
+    return {
+      id: `local-${index}`,
+      type: 'post',
+      url,
+      category
+    };
+  });
+};
+
 // Shared Gallery Items
 const galleryItems: any[] = [
+  ...getLocalGalleryItems(),
   // --- Manicure / Pedicure ---
   {
     id: 'mp-new-1',
@@ -242,6 +265,7 @@ export const content: Record<string, ContentData> = {
         name: 'Nome',
         phone: 'Telefone',
         date: 'Data',
+        time: 'Horário',
         service: 'Serviço',
         message: 'Mensagem',
         submit: 'Enviar pedido',
@@ -387,6 +411,7 @@ export const content: Record<string, ContentData> = {
         name: 'Name',
         phone: 'Phone',
         date: 'Date',
+        time: 'Time',
         service: 'Service',
         message: 'Message',
         submit: 'Send Request',
