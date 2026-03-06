@@ -1038,7 +1038,14 @@ const MainSite: React.FC = () => {
                         </a>
                         <div>
                           <p className="font-headline text-[10px] font-bold uppercase tracking-[0.25em] text-puro-gold mb-3">{t.contact.info.call}</p>
-                          <p className="font-body text-xl md:text-2xl font-light tracking-wide">{websiteInfo.contact_phone || '+258 84 892 0837'}</p>
+                          {websiteInfo.contact_phone ? (
+                            <p className="font-body text-xl md:text-2xl font-light tracking-wide">{websiteInfo.contact_phone}</p>
+                          ) : (
+                            <div className="flex flex-col gap-1">
+                              <p className="font-body text-xl md:text-2xl font-light tracking-wide">+258 84 892 0837</p>
+                              <p className="font-body text-xl md:text-2xl font-light tracking-wide">+258 86 425 2968</p>
+                            </div>
+                          )}
                         </div>
                       </motion.div>
 
@@ -1112,7 +1119,7 @@ const MainSite: React.FC = () => {
               <div className="flex gap-4">
                 <motion.a
                   whileHover={{ scale: 1.1, backgroundColor: "#FF5BA0", color: "#ffffff", borderColor: "#FF5BA0" }}
-                  href="https://wa.me/258848920837"
+                  href="https://wa.me/258864252968"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="WhatsApp"
