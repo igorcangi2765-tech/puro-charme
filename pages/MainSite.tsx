@@ -796,8 +796,12 @@ const MainSite: React.FC = () => {
                           muted
                           playsInline
                           preload="metadata"
+                          onError={(e) => {
+                            const parent = e.currentTarget.closest('.group');
+                            if (parent) (parent as HTMLElement).style.display = 'none';
+                          }}
                         />
-                        <div className="absolute inset-0 flex items-center justify-center z-10">
+                        <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
                           <div className="w-12 h-12 bg-white/30 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/50 shadow-sm transition-transform duration-300 group-hover:scale-110 group-hover:bg-puro-pink group-hover:border-puro-pink">
                             <Play size={20} className="text-white ml-1" fill="currentColor" />
                           </div>
@@ -810,7 +814,8 @@ const MainSite: React.FC = () => {
                         className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-110"
                         loading="lazy"
                         onError={(e) => {
-                          e.currentTarget.style.display = 'none';
+                          const parent = e.currentTarget.closest('.group');
+                          if (parent) (parent as HTMLElement).style.display = 'none';
                         }}
                       />
                     )}
