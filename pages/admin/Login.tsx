@@ -1,14 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuthStore } from '../../store/authStore';
 import { supabase } from '../../lib/supabase';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 
 const Login: React.FC = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
-    const { initialize } = useAuthStore();
+    const { initialize, user, isAdmin } = useAuthStore();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (user && isAdmin) {
+            navigate('/admin');
+        }
+    }, [user, isAdmin, navigate]);
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -23,8 +31,9 @@ const Login: React.FC = () => {
 
             if (error) throw error;
 
-            // The auth store listener in App.tsx will handle the redirect
+            // Navigate to the admin portal
             await initialize();
+            navigate('/admin');
 
         } catch (err: any) {
             setError(err.message || 'Error occurred during login');

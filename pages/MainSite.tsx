@@ -775,62 +775,65 @@ const MainSite: React.FC = () => {
               </div>
 
               {/* Gallery Grid Layout */}
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-6">
-                {t.gallery.items.filter(item => activeCategory === 'all' || item.category === activeCategory).map((item, i) => (
-                  <motion.div
-                    key={item.id}
-                    layout
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    whileHover={{ y: -5 }}
-                    className="relative aspect-[4/5] rounded-card overflow-hidden cursor-pointer group shadow-card border border-gray-100 bg-white"
-                    onClick={() => setSelectedItem(item as GalleryItem)}
-                  >
-                    {/* Media Source */}
-                    {item.type === 'video' ? (
-                      <div className="relative w-full h-full">
-                        <video
+              <motion.div layout className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-6">
+                <AnimatePresence mode="popLayout">
+                  {t.gallery.items.filter(item => activeCategory === 'all' || item.category === activeCategory).map((item, i) => (
+                    <motion.div
+                      key={item.id}
+                      layout
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.8, transition: { duration: 0.2 } }}
+                      transition={{ duration: 0.3 }}
+                      whileHover={{ y: -5 }}
+                      className="relative aspect-[4/5] rounded-card overflow-hidden cursor-pointer group shadow-card border border-gray-100 bg-white"
+                      onClick={() => setSelectedItem(item as GalleryItem)}
+                    >
+                      {/* Media Source */}
+                      {item.type === 'video' ? (
+                        <div className="relative w-full h-full">
+                          <video
+                            src={item.url}
+                            className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-110"
+                            muted
+                            playsInline
+                            preload="metadata"
+                            onError={(e) => {
+                              const parent = e.currentTarget.closest('.group');
+                              if (parent) (parent as HTMLElement).style.display = 'none';
+                            }}
+                          />
+                          <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
+                            <div className="w-12 h-12 bg-white/30 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/50 shadow-sm transition-transform duration-300 group-hover:scale-110 group-hover:bg-puro-pink group-hover:border-puro-pink">
+                              <Play size={20} className="text-white ml-1" fill="currentColor" />
+                            </div>
+                          </div>
+                        </div>
+                      ) : (
+                        <img
                           src={item.url}
-                          className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-110"
-                          muted
-                          playsInline
-                          preload="metadata"
+                          alt="Gallery Item"
+                          className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-110"
+                          loading="lazy"
                           onError={(e) => {
                             const parent = e.currentTarget.closest('.group');
                             if (parent) (parent as HTMLElement).style.display = 'none';
                           }}
                         />
-                        <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
-                          <div className="w-12 h-12 bg-white/30 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/50 shadow-sm transition-transform duration-300 group-hover:scale-110 group-hover:bg-puro-pink group-hover:border-puro-pink">
-                            <Play size={20} className="text-white ml-1" fill="currentColor" />
-                          </div>
-                        </div>
-                      </div>
-                    ) : (
-                      <img
-                        src={item.url}
-                        alt="Gallery Item"
-                        className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-110"
-                        loading="lazy"
-                        onError={(e) => {
-                          const parent = e.currentTarget.closest('.group');
-                          if (parent) (parent as HTMLElement).style.display = 'none';
-                        }}
-                      />
-                    )}
+                      )}
 
-                    {/* Overlay (Hover Actions) - Only show if NOT video (video has its own play button visual) or modify to work together */}
-                    {item.type !== 'video' && (
-                      <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-[2px]">
-                        <span className="text-white bg-white/20 px-6 py-2 rounded-full text-xs font-headline font-bold backdrop-blur-md border border-white/30 transform scale-0 group-hover:scale-100 transition-transform duration-300">
-                          {t.gallery.action}
-                        </span>
-                      </div>
-                    )}
-                  </motion.div>
-                ))}
-              </div>
+                      {/* Overlay (Hover Actions) - Only show if NOT video (video has its own play button visual) or modify to work together */}
+                      {item.type !== 'video' && (
+                        <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-[2px]">
+                          <span className="text-white bg-white/20 px-6 py-2 rounded-full text-xs font-headline font-bold backdrop-blur-md border border-white/30 transform scale-0 group-hover:scale-100 transition-transform duration-300">
+                            {t.gallery.action}
+                          </span>
+                        </div>
+                      )}
+                    </motion.div>
+                  ))}
+                </AnimatePresence>
+              </motion.div>
             </motion.div>
 
             {/* Lightbox / Modal */}
