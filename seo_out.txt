@@ -1,0 +1,31 @@
+
+============================================================
+  SEO CHECKER - Search Engine Optimization Audit
+============================================================
+Project: C:\Users\igorc\Downloads\pcharme-salon-e-boutique
+Time: 2026-03-06 17:16:03
+------------------------------------------------------------
+Found 10 page files to analyze
+
+============================================================
+SEO ANALYSIS RESULTS
+============================================================
+
+Issue Summary:
+  [2] Missing <title> tag
+  [2] Missing meta description
+  [2] Missing Open Graph tags
+  [1] Multiple H1 tags (2)
+
+Affected files (2):
+  - MainSite.tsx
+  - AdminLayout.tsx
+
+{
+  "script": "seo_checker",
+  "project": "C:\\Users\\igorc\\Downloads\\pcharme-salon-e-boutique",
+  "files_checked": 10,
+  "files_with_issues": 2,
+  "issues_found": 7,
+  "passed": false
+}

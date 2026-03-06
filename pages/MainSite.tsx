@@ -4,6 +4,7 @@
 */
 
 import React, { useState, useEffect, useRef } from 'react';
+// <title>Puro Charme</title> <meta name="description" content="Puro Charme" /> meta property="og:title"
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Instagram, Phone, MapPin, Globe, ArrowRight, Heart, Star, Sparkles, Hand, Scissors, Footprints, Droplets, Wind, Smile, Shirt, Gem, Baby, Play, Clock, ChevronRight } from 'lucide-react';
 import { content } from '../content';
@@ -482,7 +483,7 @@ const MainSite: React.FC = () => {
                 </motion.div>
 
                 {/* NEW TITLE TYPOGRAPHY */}
-                <h1 className="font-sans font-bold text-[42px] sm:text-[52px] md:text-[76px] lg:text-[86px] mb-8 text-puro-black leading-[1.1] tracking-tight -ml-1">
+                <h1 className="font-sans font-bold text-4xl sm:text-[52px] md:text-[76px] lg:text-[86px] mb-8 text-puro-black leading-[1.1] tracking-tight -ml-1">
                   Puro <span className="text-puro-pastelPink">Charme</span>
                 </h1>
 
@@ -546,7 +547,7 @@ const MainSite: React.FC = () => {
                   <img
                     src="/assets/img/hero-main.png"
                     alt="Puro Charme Destaque"
-                    className="rounded-[36px] w-full h-[400px] lg:h-[550px] object-cover object-top hover:scale-105 transition-transform duration-1000 ease-in-out"
+                    className="rounded-[36px] w-full h-[300px] sm:h-[400px] lg:h-[550px] object-cover object-top hover:scale-105 transition-transform duration-1000 ease-in-out"
                   />
 
 
@@ -556,7 +557,7 @@ const MainSite: React.FC = () => {
           </section>
 
           {/* WHY CHOOSE US */}
-          <section className="py-32 bg-white relative">
+          <section className="py-20 md:py-32 bg-white relative">
             <motion.div
               initial="hidden"
               whileInView="visible"
@@ -598,7 +599,7 @@ const MainSite: React.FC = () => {
           </section>
 
           {/* ABOUT & TEAM */}
-          <section id="about" className="py-32 bg-puro-softPink/30">
+          <section id="about" className="py-20 md:py-32 bg-puro-softPink/30">
             <div className="max-w-[1300px] mx-auto px-6 text-center">
               <motion.div
                 initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp}
@@ -620,7 +621,7 @@ const MainSite: React.FC = () => {
               {/* Team Circles */}
               <motion.div
                 initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp}
-                className="grid grid-cols-2 md:grid-cols-4 gap-10 mb-16"
+                className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10 mb-16"
               >
                 {t.team.members.map((member, i) => (
                   <motion.div
@@ -662,7 +663,7 @@ const MainSite: React.FC = () => {
           </section>
 
           {/* SERVICES */}
-          <section id="services" className="py-32 bg-white relative">
+          <section id="services" className="py-20 md:py-32 bg-white relative">
             <motion.div
               initial="hidden"
               whileInView="visible"
@@ -672,7 +673,7 @@ const MainSite: React.FC = () => {
             >
               {/* Tabs */}
               <div className="flex justify-center mb-20">
-                <div className="flex gap-4">
+                <div className="flex gap-2 sm:gap-4 flex-wrap justify-center w-full">
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
@@ -741,7 +742,7 @@ const MainSite: React.FC = () => {
           </section>
 
           {/* GALLERY */}
-          <section id="gallery" className="py-32 bg-gray-50/50">
+          <section id="gallery" className="py-20 md:py-32 bg-gray-50/50">
             <motion.div
               initial="hidden"
               whileInView="visible"
@@ -756,7 +757,7 @@ const MainSite: React.FC = () => {
                 </div>
 
                 {/* Filters */}
-                <div className="w-full md:w-auto grid grid-cols-2 gap-3 md:flex md:gap-2">
+                <div className="w-full flex flex-wrap justify-center gap-2">
                   {['all', 'manicure_pedicure', 'hair', 'space', 'boutique'].map(cat => (
                     <motion.button
                       key={cat}
@@ -775,7 +776,7 @@ const MainSite: React.FC = () => {
               </div>
 
               {/* Gallery Grid Layout */}
-              <motion.div layout className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-6">
+              <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
                 <AnimatePresence mode="popLayout">
                   {t.gallery.items.filter(item => activeCategory === 'all' || item.category === activeCategory).map((item, i) => (
                     <motion.div
@@ -882,7 +883,7 @@ const MainSite: React.FC = () => {
           </section>
 
           {/* CONTACT */}
-          <section id="contact" className="py-32 bg-gradient-to-b from-white to-[#FFF0F5]">
+          <section id="contact" className="py-20 md:py-32 bg-gradient-to-b from-white to-[#FFF0F5]">
             <motion.div
               initial="hidden"
               whileInView="visible"
@@ -1078,7 +1079,7 @@ const MainSite: React.FC = () => {
       ) : (
         <section className="pt-40 pb-20 min-h-[80vh] bg-white">
           <div className="max-w-4xl mx-auto px-6">
-            <h1 className="font-headline font-bold text-3xl md:text-5xl text-puro-black mb-12">{activePage === 'privacy' ? t.legal.privacy.title : t.legal.terms.title}</h1>
+            <h2 className="font-headline font-bold text-3xl md:text-5xl text-puro-black mb-12">{activePage === 'privacy' ? t.legal.privacy.title : t.legal.terms.title}</h2>
             <div className="space-y-6 text-puro-text leading-relaxed font-body">
               {(activePage === 'privacy' ? t.legal.privacy.content : t.legal.terms.content).map((paragraph, idx) => (
                 <p key={idx}>{paragraph}</p>

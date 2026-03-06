@@ -1,4 +1,5 @@
 import React from 'react';
+// <title>Admin Dashboard</title> <meta name="description" content="Admin Dashboard" /> meta property="og:title"
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { useAuthStore } from '../../store/authStore';
 import { LayoutDashboard, ShoppingBag, ClipboardList, Settings, LogOut, Store } from 'lucide-react';
@@ -38,8 +39,8 @@ const AdminLayout: React.FC = () => {
                                     key={item.name}
                                     to={item.path}
                                     className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-colors ${isActive
-                                            ? 'bg-puro-softPink text-puro-pink'
-                                            : 'text-gray-500 hover:bg-gray-50 hover:text-puro-black'
+                                        ? 'bg-puro-softPink text-puro-pink'
+                                        : 'text-gray-500 hover:bg-gray-50 hover:text-puro-black'
                                         }`}
                                 >
                                     <Icon size={18} />

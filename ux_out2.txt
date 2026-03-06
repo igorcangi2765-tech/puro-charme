@@ -1,10 +1,8 @@
 
 [UX AUDIT] 20 files checked
 --------------------------------------------------
-[!] ISSUES (3):
-  - [Cognitive Load] index.html: Form inputs without labels. Use <label> for accessibility and clarity.
-  - [Color] AIChat.tsx: PURPLE DETECTED ('purple'). Banned by Maestro rules. Use Teal/Cyan/Emerald instead.
-  - [Cognitive Load] ArtistCard.tsx: Form inputs without labels. Use <label> for accessibility and clarity.
+[!] ISSUES (1):
+  - [Color] AIChat.tsx: PURPLE DETECTED ('fuchsia'). Banned by Maestro rules. Use Teal/Cyan/Emerald instead.
 [*] WARNINGS (134):
   - [Fitts' Law] App.tsx: Small targets (< 44px)
   - [Reflective] App.tsx: Long-form content without brand story/values. Add 'About' or 'Why We Exist' section.
