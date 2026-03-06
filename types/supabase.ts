@@ -24,6 +24,7 @@ export type Database = {
           id: string
           notes: string | null
           service_type: string
+          staff_id: string | null
           status: string
         }
         Insert: {
@@ -35,6 +36,7 @@ export type Database = {
           id?: string
           notes?: string | null
           service_type: string
+          staff_id?: string | null
           status?: string
         }
         Update: {
@@ -46,9 +48,18 @@ export type Database = {
           id?: string
           notes?: string | null
           service_type?: string
+          staff_id?: string | null
           status?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "appointments_staff_id_fkey"
+            columns: ["staff_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       categories: {
         Row: {
@@ -230,19 +241,58 @@ export type Database = {
           created_at: string
           full_name: string | null
           id: string
+          is_active: boolean | null
           is_admin: boolean | null
+          phone: string | null
+          role: Database["public"]["Enums"]["user_role"] | null
+          services_provided: string[] | null
+          working_days: string[] | null
+          working_hours: Json | null
         }
         Insert: {
           created_at?: string
           full_name?: string | null
           id: string
+          is_active?: boolean | null
           is_admin?: boolean | null
+          phone?: string | null
+          role?: Database["public"]["Enums"]["user_role"] | null
+          services_provided?: string[] | null
+          working_days?: string[] | null
+          working_hours?: Json | null
         }
         Update: {
           created_at?: string
           full_name?: string | null
           id?: string
+          is_active?: boolean | null
           is_admin?: boolean | null
+          phone?: string | null
+          role?: Database["public"]["Enums"]["user_role"] | null
+          services_provided?: string[] | null
+          working_days?: string[] | null
+          working_hours?: Json | null
+        }
+        Relationships: []
+      }
+      services: {
+        Row: {
+          created_at: string
+          duration: number
+          id: string
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          duration?: number
+          id?: string
+          name: string
+        }
+        Update: {
+          created_at?: string
+          duration?: number
+          id?: string
+          name?: string
         }
         Relationships: []
       }
@@ -275,7 +325,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      user_role: "manager" | "staff"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -402,6 +452,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      user_role: ["manager", "staff"],
+    },
   },
 } as const

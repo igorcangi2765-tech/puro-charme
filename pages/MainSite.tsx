@@ -40,7 +40,7 @@ const fadeInUp = {
     y: 0,
     transition: {
       duration: 0.8,
-      ease: [0.22, 1, 0.36, 1]
+      ease: [0.22, 1, 0.36, 1] as const
     }
   }
 };
@@ -340,7 +340,7 @@ const MainSite: React.FC = () => {
               <img
                 src="/assets/img/logo-pink.png"
                 alt="Puro Charme Pink"
-                className={`absolute top-0 left-0 h-full w-auto object-contain transition-opacity duration-200 ease-in-out ${!isScrolled ? 'opacity-100 z-10' : 'opacity-0 z-0'
+                className={`absolute top-0 left-0 h-full w-auto object-contain transition-all duration-300 ${!isScrolled ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'
                   }`}
                 onError={(e) => { e.currentTarget.style.display = 'none'; }}
               />
@@ -349,7 +349,7 @@ const MainSite: React.FC = () => {
               <img
                 src="/assets/img/logo-gold.png"
                 alt="Puro Charme Gold"
-                className={`absolute top-0 left-0 h-full w-auto object-contain transition-opacity duration-200 ease-in-out ${isScrolled ? 'opacity-100 z-10' : 'opacity-0 z-0'
+                className={`absolute top-0 left-0 h-full w-auto object-contain transition-all duration-300 ${isScrolled ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'
                   }`}
                 onError={(e) => { e.currentTarget.style.display = 'none'; }}
               />
@@ -426,26 +426,43 @@ const MainSite: React.FC = () => {
               </motion.button>
             </div>
 
-            <nav className="flex flex-col gap-4 items-center w-full mt-4">
-              {Object.entries(t.nav).map(([key, label]) => (
+            <nav className="flex flex-col gap-2 items-center w-full mt-4 overflow-y-auto max-h-[70vh]">
+              {Object.entries(t.nav).map(([key, label], i) => (
                 <motion.button
                   key={key}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 + i * 0.1 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => scrollTo(key)}
-                  className={`text-2xl font-headline font-medium transition-colors tracking-headline py-4 w-full text-center min-h-[56px] ${activeSection === key ? 'text-puro-pastelPink' : 'text-puro-black hover:text-puro-pastelPink'
+                  className={`text-2xl font-headline font-semibold transition-colors tracking-headline py-4 w-full text-center min-h-[56px] ${activeSection === key ? 'text-puro-pastelPink' : 'text-puro-black hover:text-puro-pastelPink'
                     }`}
                 >
                   {label}
                 </motion.button>
               ))}
               <motion.button
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 + Object.keys(t.nav).length * 0.1 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => { scrollTo('contact'); setMobileMenuOpen(false); }}
-                className="mt-6 w-full py-4 min-h-[56px] bg-puro-pink text-white font-headline font-medium rounded-button shadow-lg shadow-puro-pink/30"
+                className="mt-6 w-full py-5 min-h-[60px] bg-puro-pink text-white font-headline font-bold uppercase tracking-widest rounded-button shadow-lg shadow-puro-pink/30 flex items-center justify-center gap-2"
               >
-                {t.hero.ctaPrimary}
+                {t.hero.ctaPrimary} <ArrowRight size={18} />
               </motion.button>
             </nav>
+
+            {/* Mobile Socials */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.8 }}
+              className="mt-auto pt-8 border-t border-gray-100 flex justify-center gap-6"
+            >
+              <a href="https://instagram.com/purocharme20229" target="_blank" className="p-3 bg-gray-50 rounded-full text-gray-400"><Instagram size={20} /></a>
+              <a href="https://wa.me/258864252968" target="_blank" className="p-3 bg-gray-50 rounded-full text-gray-400"><Phone size={20} /></a>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
@@ -543,14 +560,14 @@ const MainSite: React.FC = () => {
                 className="relative z-0"
               >
                 <div className="absolute top-10 right-10 w-full h-full bg-gradient-to-tr from-puro-softPink to-white rounded-[60px] -z-10 blur-3xl opacity-80"></div>
-                <div className="relative rounded-[40px] overflow-hidden shadow-soft bg-white p-2">
+                <div className="relative rounded-[40px] overflow-hidden shadow-soft bg-white p-2 min-h-[300px] sm:min-h-[400px] lg:min-h-[550px]">
                   <img
                     src="/assets/img/hero-main.png"
                     alt="Puro Charme Destaque"
                     className="rounded-[36px] w-full h-[300px] sm:h-[400px] lg:h-[550px] object-cover object-top hover:scale-105 transition-transform duration-1000 ease-in-out"
+                    onLoad={(e) => (e.currentTarget.style.opacity = '1')}
+                    style={{ opacity: 0, transition: 'opacity 0.5s ease-in' }}
                   />
-
-
                 </div>
               </motion.div>
             </div>
@@ -756,22 +773,24 @@ const MainSite: React.FC = () => {
                   <p className="text-gray-500 text-base md:text-lg leading-relaxed font-body">{t.gallery.subtitle}</p>
                 </div>
 
-                {/* Filters */}
-                <div className="w-full flex flex-wrap justify-center gap-2">
-                  {['all', 'manicure_pedicure', 'hair', 'space', 'boutique'].map(cat => (
-                    <motion.button
-                      key={cat}
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      onClick={() => setActiveCategory(cat)}
-                      className={`px-4 py-3 md:px-6 md:py-2 min-h-[44px] rounded-full text-[11px] md:text-[10px] font-headline font-bold uppercase tracking-widest border transition-all whitespace-nowrap flex items-center justify-center ${activeCategory === cat
-                        ? 'bg-puro-pastelPink text-white border-puro-pastelPink shadow-md'
-                        : 'bg-white text-gray-400 border-gray-200 hover:border-puro-pastelPink hover:text-puro-pastelPink'
-                        }`}
-                    >
-                      {t.gallery.filters[cat as keyof typeof t.gallery.filters]}
-                    </motion.button>
-                  ))}
+                {/* Filters - Mobile Scrollable */}
+                <div className="w-full overflow-x-auto pb-4 -mb-4 scrollbar-hide">
+                  <div className="flex flex-nowrap md:flex-wrap md:justify-center gap-2 min-w-max md:min-w-0 px-1">
+                    {['all', 'manicure_pedicure', 'hair', 'space', 'boutique'].map(cat => (
+                      <motion.button
+                        key={cat}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={() => setActiveCategory(cat)}
+                        className={`px-5 py-3 md:px-6 md:py-2 min-h-[44px] rounded-full text-[11px] md:text-[10px] font-headline font-bold uppercase tracking-widest border transition-all whitespace-nowrap flex items-center justify-center ${activeCategory === cat
+                          ? 'bg-puro-pastelPink text-white border-puro-pastelPink shadow-md'
+                          : 'bg-white text-gray-400 border-gray-200 hover:border-puro-pastelPink hover:text-puro-pastelPink'
+                          }`}
+                      >
+                        {t.gallery.filters[cat as keyof typeof t.gallery.filters]}
+                      </motion.button>
+                    ))}
+                  </div>
                 </div>
               </div>
 
@@ -795,18 +814,21 @@ const MainSite: React.FC = () => {
                         <div className="relative w-full h-full">
                           <video
                             src={item.url}
-                            className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-110"
+                            className="w-full h-full object-cover object-center transition-all duration-700 group-hover:scale-110"
                             muted
                             playsInline
                             preload="metadata"
+                            onLoadedData={(e) => (e.currentTarget.style.opacity = '1')}
+                            style={{ opacity: 0, transition: 'opacity 0.5s ease-in' }}
                             onError={(e) => {
                               const parent = e.currentTarget.closest('.group');
                               if (parent) (parent as HTMLElement).style.display = 'none';
                             }}
                           />
                           <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
-                            <div className="w-12 h-12 bg-white/30 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/50 shadow-sm transition-transform duration-300 group-hover:scale-110 group-hover:bg-puro-pink group-hover:border-puro-pink">
-                              <Play size={20} className="text-white ml-1" fill="currentColor" />
+                            <div className="w-16 h-16 md:w-12 md:h-12 bg-white/30 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/50 shadow-sm transition-transform duration-300 group-hover:scale-110 group-hover:bg-puro-pink group-hover:border-puro-pink">
+                              <Play size={28} className="text-white ml-1 block md:hidden" fill="currentColor" />
+                              <Play size={20} className="text-white ml-1 hidden md:block" fill="currentColor" />
                             </div>
                           </div>
                         </div>
@@ -814,8 +836,10 @@ const MainSite: React.FC = () => {
                         <img
                           src={item.url}
                           alt="Gallery Item"
-                          className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-110"
+                          className="w-full h-full object-cover object-top transition-all duration-700 group-hover:scale-110"
                           loading="lazy"
+                          onLoad={(e) => (e.currentTarget.style.opacity = '1')}
+                          style={{ opacity: 0, transition: 'opacity 0.5s ease-in' }}
                           onError={(e) => {
                             const parent = e.currentTarget.closest('.group');
                             if (parent) (parent as HTMLElement).style.display = 'none';
@@ -917,14 +941,14 @@ const MainSite: React.FC = () => {
                     </motion.div>
                   ) : (
                     <form onSubmit={handleFormSubmit} className="space-y-6">
-                      <div className="grid grid-cols-2 gap-6">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2">
                           <label className="font-body text-xs font-medium uppercase tracking-[0.2em] text-gray-400 pl-1 block">{t.contact.form.name}</label>
                           <input
                             name="name"
                             value={formData.name}
                             onChange={handleFormChange}
-                            className="w-full bg-puro-inputBg border border-transparent p-4 rounded-xl text-sm focus:bg-white focus:border-puro-pastelPink/30 focus:ring-4 focus:ring-puro-softPink transition-all placeholder:text-gray-300 outline-none text-puro-black font-body font-medium"
+                            className="w-full bg-puro-inputBg border border-transparent p-4 md:p-4 min-h-[52px] md:min-h-0 rounded-xl text-sm focus:bg-white focus:border-puro-pastelPink/30 focus:ring-4 focus:ring-puro-softPink transition-all placeholder:text-gray-300 outline-none text-puro-black font-body font-medium"
                             required
                           />
                         </div>
@@ -934,28 +958,28 @@ const MainSite: React.FC = () => {
                             name="phone"
                             value={formData.phone}
                             onChange={handleFormChange}
-                            className="w-full bg-puro-inputBg border border-transparent p-4 rounded-xl text-sm focus:bg-white focus:border-puro-pastelPink/30 focus:ring-4 focus:ring-puro-softPink transition-all placeholder:text-gray-300 outline-none text-puro-black font-body font-medium"
+                            className="w-full bg-puro-inputBg border border-transparent p-4 md:p-4 min-h-[52px] md:min-h-0 rounded-xl text-sm focus:bg-white focus:border-puro-pastelPink/30 focus:ring-4 focus:ring-puro-softPink transition-all placeholder:text-gray-300 outline-none text-puro-black font-body font-medium"
                             required
                           />
                         </div>
                       </div>
-                      <div className="grid grid-cols-2 gap-6">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2">
                           <label className="font-body text-xs font-medium uppercase tracking-[0.2em] text-gray-400 pl-1 block">{t.contact.form.date}</label>
-                          <div className="flex gap-2">
+                          <div className="flex flex-col sm:flex-row gap-2">
                             <input
                               name="date"
                               type="date"
                               value={formData.date}
                               onChange={handleFormChange}
                               required
-                              className="w-full bg-puro-inputBg border border-transparent p-4 rounded-xl text-sm focus:bg-white focus:border-puro-pastelPink/30 focus:ring-4 focus:ring-puro-softPink transition-all text-puro-black outline-none font-body font-medium"
+                              className="w-full bg-puro-inputBg border border-transparent p-4 min-h-[52px] rounded-xl text-sm focus:bg-white focus:border-puro-pastelPink/30 focus:ring-4 focus:ring-puro-softPink transition-all text-puro-black outline-none font-body font-medium"
                             />
                             <select
                               name="time"
                               value={formData.time}
                               onChange={handleFormChange}
-                              className="w-[120px] bg-puro-inputBg border border-transparent p-4 rounded-xl text-sm focus:bg-white focus:border-puro-pastelPink/30 focus:ring-4 focus:ring-puro-softPink transition-all text-puro-black outline-none font-body font-medium"
+                              className="w-full sm:w-[120px] bg-puro-inputBg border border-transparent p-4 min-h-[52px] rounded-xl text-sm focus:bg-white focus:border-puro-pastelPink/30 focus:ring-4 focus:ring-puro-softPink transition-all text-puro-black outline-none font-body font-medium"
                             >
                               {Array.from({ length: 11 }).map((_, i) => {
                                 const hour = i + 9; // 9:00 to 19:00
@@ -971,14 +995,19 @@ const MainSite: React.FC = () => {
                         </div>
                         <div className="space-y-2">
                           <label className="font-body text-xs font-medium uppercase tracking-[0.2em] text-gray-400 pl-1 block">{t.contact.form.service}</label>
-                          <select
-                            name="service"
-                            value={formData.service}
-                            onChange={handleFormChange}
-                            className="w-full bg-puro-inputBg border border-transparent p-4 rounded-xl text-sm focus:bg-white focus:border-puro-pastelPink/30 focus:ring-4 focus:ring-puro-softPink transition-all text-puro-black outline-none appearance-none font-body font-medium"
-                          >
-                            {t.services.salon.map(s => <option key={s.title} value={s.title}>{s.title}</option>)}
-                          </select>
+                          <div className="relative">
+                            <select
+                              name="service"
+                              value={formData.service}
+                              onChange={handleFormChange}
+                              className="w-full bg-puro-inputBg border border-transparent p-4 min-h-[52px] rounded-xl text-sm focus:bg-white focus:border-puro-pastelPink/30 focus:ring-4 focus:ring-puro-softPink transition-all text-puro-black outline-none appearance-none font-body font-medium"
+                            >
+                              {t.services.salon.map(s => <option key={s.title} value={s.title}>{s.title}</option>)}
+                            </select>
+                            <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
+                              <ChevronRight size={16} className="rotate-90" />
+                            </div>
+                          </div>
                         </div>
                       </div>
                       <div className="space-y-2">
@@ -987,9 +1016,9 @@ const MainSite: React.FC = () => {
                           name="message"
                           value={formData.message}
                           onChange={handleFormChange}
-                          rows={3}
+                          rows={4}
                           required
-                          className="w-full bg-puro-inputBg border border-transparent p-4 rounded-xl text-sm focus:bg-white focus:border-puro-pastelPink/30 focus:ring-4 focus:ring-puro-softPink transition-all placeholder:text-gray-300 outline-none resize-none text-puro-black font-body font-medium"
+                          className="w-full bg-puro-inputBg border border-transparent p-4 rounded-xl text-sm focus:bg-white focus:border-puro-pastelPink/30 focus:ring-4 focus:ring-puro-softPink transition-all placeholder:text-gray-300 outline-none resize-none text-puro-black font-body font-medium min-h-[120px]"
                         ></textarea>
                       </div>
 

@@ -4,14 +4,16 @@ import MainSite from './pages/MainSite';
 import AdminLayout from './pages/admin/AdminLayout';
 import Dashboard from './pages/admin/Dashboard';
 import Login from './pages/admin/Login';
-import Products from './pages/admin/Products';
-import Orders from './pages/admin/Orders';
-import Agenda from './pages/admin/Agenda';
 import Settings from './pages/admin/Settings';
 import { useAuthStore } from './store/authStore';
 
+import Bookings from './pages/admin/Bookings';
+import CalendarView from './pages/admin/CalendarView';
+import Staff from './pages/admin/Staff';
+import Customers from './pages/admin/Customers';
+
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  const { user, isAdmin, isLoading } = useAuthStore();
+  const { user, isManager, isStaff, isLoading } = useAuthStore();
 
   if (isLoading) {
     return (
@@ -21,7 +23,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
     );
   }
 
-  if (!user || !isAdmin) {
+  if (!user || (!isManager && !isStaff)) {
     return <Navigate to="/admin/login" replace />;
   }
 
@@ -48,9 +50,10 @@ const App: React.FC = () => {
           </ProtectedRoute>
         }>
           <Route index element={<Dashboard />} />
-          <Route path="products" element={<Products />} />
-          <Route path="orders" element={<Orders />} />
-          <Route path="agenda" element={<Agenda />} />
+          <Route path="bookings" element={<Bookings />} />
+          <Route path="calendar" element={<CalendarView />} />
+          <Route path="customers" element={<Customers />} />
+          <Route path="staff" element={<Staff />} />
           <Route path="settings" element={<Settings />} />
         </Route>
       </Routes>

@@ -9,6 +9,8 @@ interface AuthState {
     user: User | null;
     profile: Profile | null;
     isAdmin: boolean;
+    isManager: boolean;
+    isStaff: boolean;
     isLoading: boolean;
     initialize: () => Promise<void>;
     signOut: () => Promise<void>;
@@ -18,6 +20,8 @@ export const useAuthStore = create<AuthState>((set) => ({
     user: null,
     profile: null,
     isAdmin: false,
+    isManager: false,
+    isStaff: false,
     isLoading: true,
     initialize: async () => {
         try {
@@ -40,11 +44,13 @@ export const useAuthStore = create<AuthState>((set) => ({
                 set({
                     user: session.user,
                     profile: profile || null,
-                    isAdmin: profile?.is_admin || false,
+                    isAdmin: profile?.role === 'manager' || profile?.is_admin || false,
+                    isManager: profile?.role === 'manager' || profile?.is_admin || false,
+                    isStaff: profile?.role === 'staff' || false,
                     isLoading: false
                 });
             } else {
-                set({ user: null, profile: null, isAdmin: false, isLoading: false });
+                set({ user: null, profile: null, isAdmin: false, isManager: false, isStaff: false, isLoading: false });
             }
 
             // Listen for auth changes
@@ -59,15 +65,17 @@ export const useAuthStore = create<AuthState>((set) => ({
                     set({
                         user: session.user,
                         profile: profile || null,
-                        isAdmin: profile?.is_admin || false,
+                        isAdmin: profile?.role === 'manager' || profile?.is_admin || false,
+                        isManager: profile?.role === 'manager' || profile?.is_admin || false,
+                        isStaff: profile?.role === 'staff' || false,
                     });
                 } else {
-                    set({ user: null, profile: null, isAdmin: false });
+                    set({ user: null, profile: null, isAdmin: false, isManager: false, isStaff: false });
                 }
             });
         } catch (error) {
             console.error('Auth initialization error:', error);
-            set({ user: null, profile: null, isAdmin: false, isLoading: false });
+            set({ user: null, profile: null, isAdmin: false, isManager: false, isStaff: false, isLoading: false });
         }
     },
     signOut: async () => {

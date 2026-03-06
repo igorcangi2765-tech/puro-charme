@@ -10,9 +10,11 @@ const AdminLayout: React.FC = () => {
 
     const navItems = [
         { name: 'Dashboard', path: '/admin', icon: LayoutDashboard },
-        { name: 'Products', path: '/admin/products', icon: ShoppingBag },
-        { name: 'Orders (WhatsApp)', path: '/admin/orders', icon: ClipboardList },
-        { name: 'Website Config', path: '/admin/settings', icon: Settings },
+        { name: 'Bookings', path: '/admin/bookings', icon: ClipboardList },
+        { name: 'Calendar', path: '/admin/calendar', icon: Store },
+        { name: 'Customers', path: '/admin/customers', icon: Store },
+        { name: 'Staff', path: '/admin/staff', icon: Settings },
+        { name: 'Settings', path: '/admin/settings', icon: Settings },
     ];
 
     return (
@@ -53,8 +55,8 @@ const AdminLayout: React.FC = () => {
 
                 <div className="p-4 border-t border-gray-100">
                     <div className="mb-4 px-4">
-                        <p className="text-sm font-semibold text-puro-black truncate">{profile?.full_name || 'Admin User'}</p>
-                        <p className="text-xs text-gray-400">Administrator</p>
+                        <p className="text-sm font-semibold text-puro-black truncate">{profile?.full_name || 'Usuário'}</p>
+                        <p className="text-xs text-gray-400 capitalize">{profile?.role || 'Acesso Admin'}</p>
                     </div>
                     <button
                         onClick={() => signOut()}
