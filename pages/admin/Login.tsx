@@ -31,12 +31,23 @@ const Login: React.FC = () => {
 
             if (error) throw error;
 
-            // Navigate to the admin portal
+            // Initialize store to fetch profile
             await initialize();
+
+            // Check if successful login corresponds to an admin account
+            const state = useAuthStore.getState();
+            if (!state.isAdmin) {
+                // Not an admin, sign out immediately and clear state to avoid being semi-logged in
+                await supabase.auth.signOut();
+                await initialize();
+                throw new Error('Acesso negado: Este e-mail não tem credenciais de administrador.');
+            }
+
+            // Success: Navigate to the admin portal
             navigate('/admin');
 
         } catch (err: any) {
-            setError(err.message || 'Error occurred during login');
+            setError(err.message || 'Ocorreu um erro durante o login.');
         } finally {
             setLoading(false);
         }
